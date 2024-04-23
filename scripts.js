@@ -1,58 +1,75 @@
 $(document).ready(function () {
-  $(document).on("click", "#submit_comment", function (e) {
-    e.preventDefault();
-    var comment_text = $("#comment_text").val();
-    var url = $("#comment_form").attr("action");
-    if (comment_text === "") return;
-    $.ajax({
-      url: url,
-      type: "POST",
-      data: {
-        comment_text: comment_text,
-        comment_posted: 1,
-      },
-      success: function (data) {
-        var response = JSON.parse(data);
-        if (data === "error") {
-          alert("There was an error adding comment. Please try again");
-        } else {
-          $("#comments-wrapper").prepend(response.comment);
-          $("#comments_count").text(response.comments_count);
-          $("#comment_text").val("");
-        }
-      },
-    });
+  $(".menu-toggle").on("click", function () {
+    $(".nav").toggleClass("showing");
+    $(".nav ul").toggleClass("showing");
   });
 
-  $(document).on("click", ".reply-btn", function (e) {
-    e.preventDefault();
-    var comment_id = $(this).data("id");
-    $(this)
-      .parent()
-      .siblings("form#comment_reply_form_" + comment_id)
-      .toggle(500);
-    $(document).on("click", ".submit-reply", function (e) {
-      e.preventDefault();
-      var reply_textarea = $(this).siblings("textarea");
-      var reply_text = $(this).siblings("textarea").val();
-      var url = $(this).parent().attr("action");
-      $.ajax({
-        url: url,
-        type: "POST",
-        data: {
-          comment_id: comment_id,
-          reply_text: reply_text,
-          reply_posted: 1,
+  $(".post-wrapper").slick({
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    nextArrow: $(".next"),
+    prevArrow: $(".prev"),
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true,
         },
-        success: function (data) {
-          if (data === "error") {
-            alert("There was an error adding reply. Please try again");
-          } else {
-            $(".replies_wrapper_" + comment_id).append(data);
-            reply_textarea.val("");
-          }
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
         },
-      });
-    });
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+      // You can unslick at a given breakpoint now by adding:
+      // settings: "unslick"
+      // instead of a settings object
+    ],
   });
+});
+
+ClassicEditor.create(document.querySelector("#body"), {
+  toolbar: [
+    "heading",
+    "|",
+    "bold",
+    "italic",
+    "link",
+    "bulletedList",
+    "numberedList",
+    "blockQuote",
+  ],
+  heading: {
+    options: [
+      { model: "paragraph", title: "Paragraph", class: "ck-heading_paragraph" },
+      {
+        model: "heading1",
+        view: "h1",
+        title: "Heading 1",
+        class: "ck-heading_heading1",
+      },
+      {
+        model: "heading2",
+        view: "h2",
+        title: "Heading 2",
+        class: "ck-heading_heading2",
+      },
+    ],
+  },
+}).catch((error) => {
+  console.log(error);
 });

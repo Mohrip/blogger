@@ -10,46 +10,41 @@ adminOnly();
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-        
+        <!-- Font Awesome -->
         <link rel="stylesheet"
             href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
             integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
             crossorigin="anonymous">
 
-        
+        <!-- Google Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Candal|Lora"
             rel="stylesheet">
 
-        
+        <!-- Custom Styling -->
         <link rel="stylesheet" href="../../assets/css/style.css">
 
-        
+        <!-- Admin Styling -->
         <link rel="stylesheet" href="../../assets/css/admin.css">
 
-        <title>Manage Posts</title>
+        <title>statistics</title>
     </head>
 
     <body>
         
     <?php include(ROOT_PATH . "/app/includes/adminHeader.php"); ?>
 
-        
+        <!-- Admin Page Wrapper -->
         <div class="admin-wrapper">
 
         <?php include(ROOT_PATH . "/app/includes/adminSidebar.php"); ?>
 
 
-            
+            <!-- Admin Content -->
             <div class="admin-content">
-                <div class="button-group">
-                    <a href="create.php" class="btn btn-big">Add Post</a>
-                    <a href="index.php" class="btn btn-big">Manage Posts</a>
-                </div>
-
 
                 <div class="content">
 
-                    <h2 class="page-title">Manage Posts</h2>
+                    <h2 class="page-title">statistics</h2>
 
                     <?php include(ROOT_PATH . "/app/includes/messages.php"); ?>
 
@@ -57,22 +52,16 @@ adminOnly();
                         <thead>
                             <th>SN</th>
                             <th>Title</th>
-                            <th colspan="3">Action</th>
+                            <th>Rating</th>
+                            <th>Number of Comments</td>
                         </thead>
                         <tbody>
-                            <?php foreach ($temp as $key => $post): ?>
+                            <?php foreach ($top_id as $key => $post): ?>
                                 <tr>
                                     <td><?php echo $key + 1; ?></td>
                                     <td><?php echo $post['title'] ?></td>
-                                    <td><a href="edit.php?id=<?php echo $post['id']; ?>" class="edit">edit</a></td>
-                                    <td><a href="edit.php?delete_id=<?php echo $post['id']; ?>" class="delete">delete</a></td>
-
-                                    <?php if ($post['published']): ?>
-                                        <td><a href="edit.php?published=0&p_id=<?php echo $post['id'] ?>" class="unpublish">unpublish</a></td>
-                                    <?php else: ?>
-                                        <td><a href="edit.php?published=1&p_id=<?php echo $post['id'] ?>" class="publish">publish</a></td>
-                                    <?php endif; ?>
-                                    
+                                    <td><?php if (avgRating($post['id']) == null){ echo "Not Rated";}else echo avgRating($post['id'])?></td>
+                                    <td><?php echo getCommentsCountByPostId1($post['id']) ?></td>
                                 </tr>
                             <?php endforeach; ?>
 
@@ -82,20 +71,20 @@ adminOnly();
                 </div>
 
             </div>
-           
+            <!-- // Admin Content -->
 
         </div>
-        
+        <!-- // Page Wrapper -->
 
 
 
-        
+        <!-- JQuery -->
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        
+        <!-- Ckeditor -->
         <script
             src="https://cdn.ckeditor.com/ckeditor5/12.2.0/classic/ckeditor.js"></script>
-        
+        <!-- Custom Script -->
         <script src="../../assets/js/scripts.js"></script>
 
     </body>
